@@ -5,8 +5,48 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Icarus_Drones"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="431" Width="760">
     <Grid>
-
+        <ListView x:Name="CompletedListview" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="510,40,25,77">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <StatusBar x:Name="StatusBar" Margin="0,391,0,0"/>
+        <Button x:Name="ServicedBtn" Content="Mark as Serviced" HorizontalAlignment="Left" Margin="265,351,0,0" VerticalAlignment="Top" Width="225" Height="35"/>
+        <Button x:Name="CollectedBtn" Content="Order Collected" HorizontalAlignment="Left" Margin="510,351,0,0" VerticalAlignment="Top" Width="225" Height="35"/>
+        <Button x:Name="AddBtn" Content="Add to Orders" HorizontalAlignment="Left" Margin="20,351,0,0" VerticalAlignment="Top" Width="225" Height="35" />
+        <Label x:Name="RegularOrdersLabel" Content="Regular Orders" HorizontalAlignment="Left" Margin="265,182,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ExpressOrdersLabel" Content="Express Orders" HorizontalAlignment="Left" Margin="265,14,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="CompletedOrdersLabel" Content="Completed Orders" HorizontalAlignment="Left" Margin="510,14,0,0" VerticalAlignment="Top"/>
+        <ListView x:Name="ExpressListview" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="265,40,270,240" Width="225">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <ListView x:Name="RegularListview" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="265,208,270,77" Width="225">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
+        <TextBox x:Name="ClientNameTextbox" HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" Height="35.92"/>
+        <TextBox x:Name="DroneModelTextbox" HorizontalAlignment="Left" Margin="20,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
+        <TextBox x:Name="RepairCostTextbox" HorizontalAlignment="Left" Margin="20,297,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
+        <TextBox x:Name="ServiceTagTextbox" HorizontalAlignment="Left" Margin="20,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
+        <TextBox x:Name="DroneIssueTextbox" HorizontalAlignment="Left" Margin="20,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" Height="72"/>
+        <Label x:Name="PriorityLabel" Content="Priority" HorizontalAlignment="Left" Margin="20,318,0,0" VerticalAlignment="Top"/>
+        <RadioButton x:Name="RegularRadio" Content="Regular" HorizontalAlignment="Left" Margin="83,324,0,0" VerticalAlignment="Top" GroupName="Priority"/>
+        <RadioButton x:Name="ExpressRadio" Content="Express" HorizontalAlignment="Left" Margin="161,324,0,0" VerticalAlignment="Top" GroupName="Priority"/>
+        <Label x:Name="ClientNameLabel" Content="Client Name" HorizontalAlignment="Left" Margin="20,14,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="ServiceTagLabel" Content="Service Tag" HorizontalAlignment="Left" Margin="20,223,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="DroneIssueLabel" Content="Drone Issue" HorizontalAlignment="Left" Margin="20,123,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="RepairCostLabel" Content="Repair Cost" HorizontalAlignment="Left" Margin="20,270,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="DroneModelLabel" Content="Drone Model" HorizontalAlignment="Left" Margin="20,77,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
