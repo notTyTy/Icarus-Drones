@@ -45,7 +45,7 @@ namespace Icarus_Drones
             ClientNameTextbox.Clear();
             DroneModelTextbox.Clear();
             DroneIssueTextbox.Clear();
-            ServiceTagTextbox.Clear();
+            ServiceTagTextbox.Clear(); // Needs to be a Numeric Control 
             RepairCostTextbox.Clear();
             RegularRadio.IsChecked = false;
             ExpressRadio.IsChecked = false;
@@ -54,6 +54,19 @@ namespace Icarus_Drones
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             Clearboxes();
+        }
+        // 6.7 Which returns the value of the priority radio group.
+        // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
+        private string GetServicePriority()
+        {
+            if (RegularRadio.IsChecked == true)
+            {
+                return "Regular";
+            }
+            else
+            {
+                return "Express";
+            }
         }
 
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
