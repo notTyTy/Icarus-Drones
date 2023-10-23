@@ -8,7 +8,7 @@ public class Drone
     private string _clientName;
     private int _serviceTag;
     private string _serviceProblem;
-    private int _cost;
+    private double _cost;
     private string _model;
 
     public Drone() { }
@@ -26,7 +26,7 @@ public class Drone
     {
         return _serviceProblem;
     }
-    public int GetCost()
+    public double GetCost()
     {
         return _cost;
     }
@@ -46,7 +46,7 @@ public class Drone
     {
         serviceProblem = _serviceProblem;
     }
-    public void SetCost(int cost)
+    public void SetCost(double cost)
     {
         cost = _cost;
     }

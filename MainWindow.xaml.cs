@@ -53,7 +53,9 @@ namespace Icarus_Drones
 
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            Clearboxes();
+            // Clearboxes();
+            ExpressCost();
+
         }
         // 6.7 Which returns the value of the priority radio group.
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
@@ -70,7 +72,14 @@ namespace Icarus_Drones
         }
 
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
-
+        private void ExpressCost()
+        {
+            if (GetServicePriority() == "Express")
+            {
+                double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
+                RepairCostTextbox.Text = cost.ToString();
+            }
+        }
 
 
     }
