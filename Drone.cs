@@ -36,22 +36,22 @@ public class Drone
     }
     public void SetClientName(string clientName)
     {
-        clientName = _clientName;
+         _clientName = clientName;
     }
     public void SetServiceTag(int serviceTag)
     {
-        serviceTag = _serviceTag;
+         _serviceTag = serviceTag;
     }
     public void SetServiceProblem(string serviceProblem)
     {
-        serviceProblem = _serviceProblem;
+         _serviceProblem = serviceProblem;
     }
     public void SetCost(double cost)
     {
-        cost = _cost;
+        _cost = cost;
     }
     public void SetModel(string model)
     {
-        model = _model;
+        _model = model;
     }
 }

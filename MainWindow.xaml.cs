@@ -25,11 +25,11 @@ namespace Icarus_Drones
             InitializeComponent();
         }
         // 6.2 Create a global List<T> of type Drone called “FinishedList”.
-        List<Drone> FinishedList = new();
+        readonly List<Drone> FinishedList = new();
         // 6.3 Create a global Queue<T> of type Drone called “RegularService”.
-        Queue<Drone> RegularService = new();
+        readonly Queue<Drone> RegularService = new();
         // 6.4 Create a global Queue<T> of type Drone called “ExpressService”.
-        Queue<Drone> ExpressService = new();
+        readonly Queue<Drone> ExpressService = new();
 
         // 6.5 Create a button method called “AddNewItem” that will add a new service item to a Queue<> based 
         // on the priority. Use TextBoxes for the Client Name, Drone Model, Service Problem and Service Cost.
@@ -37,7 +37,34 @@ namespace Icarus_Drones
         // Queue based on the Priority radio button.
         public void AddNewItem()
         {
+            if (int.TryParse(ServiceTagTextbox.Text, out int serviceTag) // Service tag needs to be updated to an updown 
+                && double.TryParse(RepairCostTextbox.Text, out double cost))
+            {
+                var priority = GetServicePriority();
+                var setInt = Enqueue(serviceTag, cost);
+                var queueChosen = priority switch
+                {
+                    "Regular" => RegularService,
+                    "Express" => ExpressService,
+                    _ => throw new NotImplementedException()
+                };
+                queueChosen.Enqueue(setInt);
+            }
+            else
+            {
+                MessageBox.Show("Please input cost correctly! (2.dp)", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Hand);
+            }
+        }
+        private Drone Enqueue(int serviceTag, double cost)
+        {
+            Drone drone = new();
 
+            drone.SetClientName(ClientNameTextbox.Text);
+            drone.SetServiceTag(serviceTag);
+            drone.SetServiceProblem(DroneIssueTextbox.Text);
+            drone.SetCost(cost);
+            drone.SetModel(DroneModelTextbox.Text);
+            return drone;
         }
         // 6.17 Create a custom method that will clear all the textboxes after each service item has been added
         public void Clearboxes()
@@ -50,11 +77,9 @@ namespace Icarus_Drones
             RegularRadio.IsChecked = false;
             ExpressRadio.IsChecked = false;
         }
-
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
-            // Clearboxes();
-            ExpressCost();
+            AddNewItem();
 
         }
         // 6.7 Which returns the value of the priority radio group.
@@ -78,6 +103,7 @@ namespace Icarus_Drones
             {
                 double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
                 RepairCostTextbox.Text = cost.ToString();
+                // Need to add regext logic for the textbox
             }
         }
 
