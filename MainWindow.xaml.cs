@@ -1,17 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+
 
 namespace Icarus_Drones
 {
@@ -54,6 +44,28 @@ namespace Icarus_Drones
             {
                 MessageBox.Show("Please input cost correctly! (2.dp)", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Hand);
             }
+            DisplayQueue();
+        }
+        private void DisplayQueue()
+        {
+            ExpressListview.Items.Clear();
+            RegularListview.Items.Clear();
+            foreach(Drone item in ExpressService)
+            {
+                ExpressListview.Items.Add(new
+                {
+                    GetClientName = item.GetClientName(),
+                    GetServiceTag = item.GetServiceTag()
+                });
+            }
+            foreach(Drone item in RegularService)
+            {
+                RegularListview.Items.Add(new
+                {
+                    GetClientName = item.GetClientName(),
+                    GetServiceTag = item.GetServiceTag()
+                });
+            }
         }
         private Drone Enqueue(int serviceTag, double cost)
         {
@@ -80,7 +92,6 @@ namespace Icarus_Drones
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             AddNewItem();
-
         }
         // 6.7 Which returns the value of the priority radio group.
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
@@ -106,7 +117,5 @@ namespace Icarus_Drones
                 // Need to add regext logic for the textbox
             }
         }
-
-
     }
 }
