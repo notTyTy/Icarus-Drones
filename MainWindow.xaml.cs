@@ -45,6 +45,7 @@ namespace Icarus_Drones
                 MessageBox.Show("Please input cost correctly! (2.dp)", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Hand);
             }
             DisplayQueue();
+            Clearboxes();
         }
         private void DisplayQueue()
         {
