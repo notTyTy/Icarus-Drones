@@ -14,7 +14,7 @@
         <Label x:Name="RegularOrdersLabel" Content="Regular Orders" HorizontalAlignment="Left" Margin="265,182,0,0" VerticalAlignment="Top"/>
         <Label x:Name="ExpressOrdersLabel" Content="Express Orders" HorizontalAlignment="Left" Margin="265,14,0,0" VerticalAlignment="Top"/>
         <Label x:Name="CompletedOrdersLabel" Content="Completed Orders" HorizontalAlignment="Left" Margin="511,14,0,0" VerticalAlignment="Top"/>
-        <ListView x:Name="ExpressListview" Margin="265,40,265,240" Width="225">
+        <ListView x:Name="ExpressListview" Margin="265,40,265,240" Width="225" SelectionChanged="SelectionChanged" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn  DisplayMemberBinding="{Binding Path = GetClientName}" Header="Client Name" Width="100"/>
@@ -22,7 +22,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="RegularListview" Margin="265,208,265,77" Width="225">
+        <ListView x:Name="RegularListview" Margin="265,208,265,77" Width="225" SelectionChanged="SelectionChanged" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn  DisplayMemberBinding="{Binding Path=GetClientName}" Header="Client Name" Width="100"/>

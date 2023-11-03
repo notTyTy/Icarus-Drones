@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Windows;
 
 
@@ -51,7 +53,7 @@ namespace Icarus_Drones
         {
             ExpressListview.Items.Clear();
             RegularListview.Items.Clear();
-            foreach(Drone item in ExpressService)
+            foreach (Drone item in ExpressService)
             {
                 ExpressListview.Items.Add(new
                 {
@@ -59,7 +61,7 @@ namespace Icarus_Drones
                     GetServiceTag = item.GetServiceTag()
                 });
             }
-            foreach(Drone item in RegularService)
+            foreach (Drone item in RegularService)
             {
                 RegularListview.Items.Add(new
                 {
@@ -98,14 +100,15 @@ namespace Icarus_Drones
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
         private string GetServicePriority()
         {
-            if (RegularRadio.IsChecked == true)
+            if (RegularRadio.IsChecked == true | RegularListview.SelectedIndex > -1)
             {
                 return "Regular";
             }
-            else
+            else if (ExpressRadio.IsChecked == true | ExpressListview.SelectedIndex > -1)
             {
                 return "Express";
             }
+            else return "";
         }
 
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
@@ -118,5 +121,40 @@ namespace Icarus_Drones
                 // Need to add regext logic for the textbox
             }
         }
+        public void DisplayTextboxes()
+        {
+            ClientNameTextbox.Text = RegularListview.SelectedValue.ToString();
+        }
+
+        private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var priority = GetServicePriority();
+            var queueChosen = priority switch
+            {
+                "Regular" => RegularService,
+                "Express" => ExpressService,
+                _ => throw new NotImplementedException()
+            };
+            int index = default;
+            if((GetServicePriority() == "Regular" && RegularListview.SelectedIndex > -1 ))
+            {
+                ExpressListview.UnselectAll();
+
+                index = RegularListview.SelectedIndex;
+            }
+            else if (GetServicePriority() == "Express" && ExpressListview.SelectedIndex > -1)
+            {
+                RegularListview.UnselectAll();
+
+                index = ExpressListview.SelectedIndex;
+            }
+            ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
+            DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
+            DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
+            ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
+            RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
+            
+        }
+
     }
 }
