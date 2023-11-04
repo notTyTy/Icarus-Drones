@@ -7,9 +7,6 @@ using System.Windows.Controls;
 
 namespace Icarus_Drones
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -26,7 +23,7 @@ namespace Icarus_Drones
         // 6.5 Create a button method called “AddNewItem” that will add a new service item to a Queue<> based 
         // on the priority. Use TextBoxes for the Client Name, Drone Model, Service Problem and Service Cost.
         // Use a numeric control for the Service Tag. The new service item will be added to the appropriate
-        // Queue based on the Priority radio button.
+        // queue based on the Priority radio button.
         public void AddNewItem()
         {
             if (int.TryParse(ServiceTagTextbox.Text, out int serviceTag) // Service tag needs to be updated to an updown 
@@ -49,25 +46,25 @@ namespace Icarus_Drones
             DisplayQueue();
             Clearboxes();
         }
+        // 6.8, 6.9 Create a custom method that will display all the elements in the Regular and Express service queue
+        // The display must use a listview and with the appropriate column headers
         private void DisplayQueue()
         {
             ExpressListview.Items.Clear();
             RegularListview.Items.Clear();
             foreach (Drone item in ExpressService)
             {
-                ExpressListview.Items.Add(new
-                {
-                    GetClientName = item.GetClientName(),
-                    GetServiceTag = item.GetServiceTag()
-                });
+                ExpressListview.Items.Add((
+                    GetClientName: item.GetClientName(),
+                    GetServiceTag: item.GetServiceTag()
+                ));
             }
             foreach (Drone item in RegularService)
             {
-                RegularListview.Items.Add(new
-                {
-                    GetClientName = item.GetClientName(),
-                    GetServiceTag = item.GetServiceTag()
-                });
+                RegularListview.Items.Add((
+                    GetClientName: item.GetClientName(),
+                    GetServiceTag: item.GetServiceTag()
+                ));
             }
         }
         private Drone Enqueue(int serviceTag, double cost)
@@ -96,8 +93,6 @@ namespace Icarus_Drones
         {
             AddNewItem();
         }
-
-
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
         private void ExpressCost()
         {
@@ -140,35 +135,33 @@ namespace Icarus_Drones
             }
             return (int)SelectCheck.None;
         }
+        // 6.12, 6.13 Create a mouse click method for the regular and express service ListView that will display the Client Name
+        // and service problem in the related textboxes
         private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             int priority = GetIndex();
-            if (priority == 0)
+            if (priority != 0)
             {
-                return;
+                (Queue<Drone> queueChosen, RadioButton radioSelection, ListView listviewChosen) = priority switch
+                {
+                    1 => (RegularService, RegularRadio, RegularListview),
+                    2 => (ExpressService, ExpressRadio, ExpressListview),
+                    _ => throw new NotImplementedException()
+                };
+                int index = listviewChosen.SelectedIndex;
+                ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
+                DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
+                DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
+                ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
+                RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
+                radioSelection.IsChecked = true;
             }
-            (Queue<Drone> queueChosen, RadioButton radioSelection, ListView listviewChosen) = priority switch
-            {
-                1 => (RegularService, RegularRadio, RegularListview),
-                2 => (ExpressService, ExpressRadio, ExpressListview),
-                _ => throw new NotImplementedException()
-            };
-            int index = listviewChosen.SelectedIndex;
-            ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
-            DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
-            DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
-            ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
-            RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
-            radioSelection.IsChecked = true;
         }
-        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
+        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e) => ExpressListview.UnselectAll();
+        private void RegularListview_LostFocus(object sender, RoutedEventArgs e) => RegularListview.UnselectAll();
+        private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
-            ExpressListview.UnselectAll();
-        }
-        private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RegularListview.UnselectAll();
-        }
 
+        }
     }
 }
