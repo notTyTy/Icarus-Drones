@@ -32,12 +32,12 @@ namespace Icarus_Drones
             if (int.TryParse(ServiceTagTextbox.Text, out int serviceTag) // Service tag needs to be updated to an updown 
                 && double.TryParse(RepairCostTextbox.Text, out double cost))
             {
-                var priority = GetServicePriority();
+                int priority = ServicePriority();
                 var setInt = Enqueue(serviceTag, cost);
                 var queueChosen = priority switch
                 {
-                    "Regular" => RegularService,
-                    "Express" => ExpressService,
+                    1 => RegularService,
+                    2 => ExpressService,
                     _ => throw new NotImplementedException()
                 };
                 queueChosen.Enqueue(setInt);
@@ -96,65 +96,70 @@ namespace Icarus_Drones
         {
             AddNewItem();
         }
-        // 6.7 Which returns the value of the priority radio group.
-        // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
-        private string GetServicePriority()
-        {
-            if (RegularRadio.IsChecked == true)
-            {
-                return "Regular";
-            }
-            else if (ExpressRadio.IsChecked == true)
-            {
-                return "Express";
-            }
-            else return "";
-
-        }
 
 
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
         private void ExpressCost()
         {
-            if (GetServicePriority() == "Express")
+            if (ServicePriority() == 2)
             {
                 double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
                 RepairCostTextbox.Text = cost.ToString();
                 // Need to add regex logic for the textbox
             }
         }
-        private string GetIndex()
+        private enum SelectCheck
+        {
+            None,
+            Regular,
+            Express
+        }
+        // 6.7 Which returns the value of the priority radio group.
+        // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
+        private int ServicePriority()
+        {
+            if (RegularRadio.IsChecked == true)
+            {
+                return (int)SelectCheck.Regular;
+            }
+            else if (ExpressRadio.IsChecked == true)
+            {
+                return (int)SelectCheck.Express;
+            }
+            return (int)SelectCheck.None;
+        }
+        private int GetIndex()
         {
             if (RegularListview.SelectedItem != null)
             {
-                return "RegularList";
+                return (int)SelectCheck.Regular;
             }
             else if (ExpressListview.SelectedItem != null)
             {
-                return "ExpressList";
+                return (int)SelectCheck.Express;
             }
-            else return "";
+            return (int)SelectCheck.None;
         }
         private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            string priority = GetIndex();
-            if (priority == "")
+            int priority = GetIndex();
+            if (priority == 0)
             {
                 return;
             }
             (Queue<Drone> queueChosen, RadioButton radioSelection, ListView listviewChosen) = priority switch
             {
-                "RegularList" => (RegularService, RegularRadio, RegularListview),
-                "ExpressList" => (ExpressService, ExpressRadio, ExpressListview),
+                1 => (RegularService, RegularRadio, RegularListview),
+                2 => (ExpressService, ExpressRadio, ExpressListview),
                 _ => throw new NotImplementedException()
             };
-                int index = listviewChosen.SelectedIndex;
-                ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
-                DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
-                DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
-                ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
-                RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
-                radioSelection.IsChecked = true;
+            int index = listviewChosen.SelectedIndex;
+            ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
+            DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
+            DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
+            ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
+            RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
+            radioSelection.IsChecked = true;
         }
         private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
         {
