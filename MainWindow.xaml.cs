@@ -138,14 +138,16 @@ namespace Icarus_Drones
         private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
             string priority = GetIndex();
+            if (priority == "")
+            {
+                return;
+            }
             (Queue<Drone> queueChosen, RadioButton radioSelection, ListView listviewChosen) = priority switch
             {
                 "RegularList" => (RegularService, RegularRadio, RegularListview),
                 "ExpressList" => (ExpressService, ExpressRadio, ExpressListview),
-                "" =>  throw new NotImplementedException()
+                _ => throw new NotImplementedException()
             };
-            if (listviewChosen.SelectedIndex > -1)
-            {
                 int index = listviewChosen.SelectedIndex;
                 ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
                 DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
@@ -153,7 +155,6 @@ namespace Icarus_Drones
                 ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
                 RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
                 radioSelection.IsChecked = true;
-            }
         }
         private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
         {
