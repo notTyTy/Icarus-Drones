@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
-
+using System.Windows.Controls;
 
 namespace Icarus_Drones
 {
@@ -100,16 +100,18 @@ namespace Icarus_Drones
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
         private string GetServicePriority()
         {
-            if (RegularRadio.IsChecked == true | RegularListview.SelectedIndex > -1)
+            if (RegularRadio.IsChecked == true)
             {
                 return "Regular";
             }
-            else if (ExpressRadio.IsChecked == true | ExpressListview.SelectedIndex > -1)
+            else if (ExpressRadio.IsChecked == true)
             {
                 return "Express";
             }
             else return "";
+
         }
+
 
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
         private void ExpressCost()
@@ -118,42 +120,48 @@ namespace Icarus_Drones
             {
                 double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
                 RepairCostTextbox.Text = cost.ToString();
-                // Need to add regext logic for the textbox
+                // Need to add regex logic for the textbox
             }
         }
-        public void DisplayTextboxes()
+        private string GetIndex()
         {
-            ClientNameTextbox.Text = RegularListview.SelectedValue.ToString();
+            if (RegularListview.SelectedItem != null)
+            {
+                return "RegularList";
+            }
+            else if (ExpressListview.SelectedItem != null)
+            {
+                return "ExpressList";
+            }
+            else return "";
         }
-
         private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            var priority = GetServicePriority();
-            var queueChosen = priority switch
+            string priority = GetIndex();
+            (Queue<Drone> queueChosen, RadioButton radioSelection, ListView listviewChosen) = priority switch
             {
-                "Regular" => RegularService,
-                "Express" => ExpressService,
-                _ => throw new NotImplementedException()
+                "RegularList" => (RegularService, RegularRadio, RegularListview),
+                "ExpressList" => (ExpressService, ExpressRadio, ExpressListview),
+                "" =>  throw new NotImplementedException()
             };
-            int index = default;
-            if((GetServicePriority() == "Regular" && RegularListview.SelectedIndex > -1 ))
+            if (listviewChosen.SelectedIndex > -1)
             {
-                ExpressListview.UnselectAll();
-
-                index = RegularListview.SelectedIndex;
+                int index = listviewChosen.SelectedIndex;
+                ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
+                DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
+                DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
+                ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
+                RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
+                radioSelection.IsChecked = true;
             }
-            else if (GetServicePriority() == "Express" && ExpressListview.SelectedIndex > -1)
-            {
-                RegularListview.UnselectAll();
-
-                index = ExpressListview.SelectedIndex;
-            }
-            ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
-            DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
-            DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
-            ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
-            RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
-            
+        }
+        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ExpressListview.UnselectAll();
+        }
+        private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
+        {
+            RegularListview.UnselectAll();
         }
 
     }
