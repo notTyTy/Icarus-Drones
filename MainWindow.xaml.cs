@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -52,19 +53,31 @@ namespace Icarus_Drones
         {
             ExpressListview.Items.Clear();
             RegularListview.Items.Clear();
+            CompletedListbox.Items.Clear();
             foreach (Drone item in ExpressService)
             {
-                ExpressListview.Items.Add((
-                    GetClientName: item.GetClientName(),
-                    GetServiceTag: item.GetServiceTag()
-                ));
+                ExpressListview.Items.Add(new
+                {
+                    GetClientName = item.GetClientName(),
+                    GetServiceTag = item.GetServiceTag()
+                });
             }
             foreach (Drone item in RegularService)
             {
-                RegularListview.Items.Add((
-                    GetClientName: item.GetClientName(),
-                    GetServiceTag: item.GetServiceTag()
-                ));
+                RegularListview.Items.Add(new
+                {
+                    GetClientName = item.GetClientName(),
+                    GetServiceTag = item.GetServiceTag()
+                });
+            }
+            foreach (Drone item in FinishedList)
+            {
+                CompletedListbox.Items.Add(new
+                {
+                    GetClientName = item.GetClientName(),
+                    GetServiceTag = item.GetServiceTag()
+                });
+
             }
         }
         private Drone Enqueue(int serviceTag, double cost)
@@ -125,14 +138,19 @@ namespace Icarus_Drones
         }
         private int GetIndex()
         {
-            if (RegularListview.SelectedItem != null)
+            if (RegularListview.SelectedIndex > -1)
             {
                 return (int)SelectCheck.Regular;
             }
-            else if (ExpressListview.SelectedItem != null)
+            else if (ExpressListview.SelectedIndex > -1
+                ^ ExpressListview.SelectedItems != null)
             {
                 return (int)SelectCheck.Express;
             }
+            /*else if (RegularListview.SelectedItems != null)
+            {
+                return (int)SelectCheck.Regular;
+            }*/
             return (int)SelectCheck.None;
         }
         // 6.12, 6.13 Create a mouse click method for the regular and express service ListView that will display the Client Name
@@ -157,11 +175,45 @@ namespace Icarus_Drones
                 radioSelection.IsChecked = true;
             }
         }
-        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e) => ExpressListview.UnselectAll();
-        private void RegularListview_LostFocus(object sender, RoutedEventArgs e) => RegularListview.UnselectAll();
+        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ExpressListview.UnselectAll();
+        }
+        private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
+        {
+            RegularListview.UnselectAll();
+        }
+
         private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
+            int priority = GetIndex();
+            (Queue<Drone> queueChosen, ListView listviewChosen) = priority switch
+            {
+                1 => (RegularService, RegularListview),
+                2 => (ExpressService, ExpressListview),
+                _ => throw new NotImplementedException()
+            };
 
+            if (listviewChosen.SelectedItems != null)
+            {
+                FinishedList.Add(queueChosen.Dequeue());
+            }
+            /*
+            if (RegularListview.SelectedItems != null)
+            {
+                FinishedList.Add(RegularService.Dequeue());
+
+            }
+            */
+            Clearboxes();
+            DisplayQueue();
+
+
+
+
+        }
+        private void CompletedListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
         }
     }
 }

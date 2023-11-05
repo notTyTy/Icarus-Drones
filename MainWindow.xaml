@@ -8,13 +8,13 @@
         Title="MainWindow" Height="431" Width="765">
     <Grid x:Name="Grid">
         <StatusBar x:Name="StatusBar" Margin="0,391,10,0"/>
-        <Button x:Name="ServicedBtn" Content="Mark as Serviced" HorizontalAlignment="Center" Margin="0,351,0,0" VerticalAlignment="Top" Width="225" Height="35"/>
+        <Button x:Name="ServicedBtn" Content="Mark as Serviced" HorizontalAlignment="Center" Margin="0,351,0,0" VerticalAlignment="Top" Width="225" Height="35" Click="ServicedBtn_Click"/>
         <Button x:Name="CollectedBtn" Content="Order Collected" HorizontalAlignment="Left" Margin="520,351,0,0" VerticalAlignment="Top" Width="225" Height="35"/>
         <Button x:Name="AddBtn" Content="Add to Orders" HorizontalAlignment="Left" Margin="20,351,0,0" VerticalAlignment="Top" Width="225" Height="35" Click="AddBtn_Click" />
         <Label x:Name="RegularOrdersLabel" Content="Regular Orders" HorizontalAlignment="Left" Margin="265,182,0,0" VerticalAlignment="Top"/>
         <Label x:Name="ExpressOrdersLabel" Content="Express Orders" HorizontalAlignment="Left" Margin="265,14,0,0" VerticalAlignment="Top"/>
         <Label x:Name="CompletedOrdersLabel" Content="Completed Orders" HorizontalAlignment="Left" Margin="511,14,0,0" VerticalAlignment="Top"/>
-        <ListView x:Name="ExpressListview" Margin="265,40,265,240" Width="225" SelectionChanged="SelectionChanged" LostFocus="ExpressListview_LostFocus"  >
+        <ListView x:Name="ExpressListview" Margin="265,40,265,240" Width="225" SelectionChanged="SelectionChanged" LostFocus="ExpressListview_LostFocus" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn  DisplayMemberBinding="{Binding Path = GetClientName}" Header="Client Name" Width="100"/>
@@ -22,7 +22,7 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <ListView x:Name="RegularListview" Margin="265,208,265,77" Width="225" SelectionChanged="SelectionChanged" LostFocus="RegularListview_LostFocus"  >
+        <ListView x:Name="RegularListview" Margin="265,208,265,77" Width="225" SelectionChanged="SelectionChanged" LostFocus="RegularListview_LostFocus" >
             <ListView.View>
                 <GridView>
                     <GridViewColumn  DisplayMemberBinding="{Binding Path=GetClientName}" Header="Client Name" Width="100"/>
@@ -43,6 +43,19 @@
         <Label x:Name="DroneIssueLabel" Content="Drone Issue" HorizontalAlignment="Left" Margin="20,123,0,0" VerticalAlignment="Top"/>
         <Label x:Name="RepairCostLabel" Content="Repair Cost" HorizontalAlignment="Left" Margin="20,270,0,0" VerticalAlignment="Top"/>
         <Label x:Name="DroneModelLabel" Content="Drone Model" HorizontalAlignment="Left" Margin="20,77,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="CompletedListbox" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="520,41,20,77" Width="225"/>
+        <ListBox x:Name="CompletedListbox" Margin="520,41,20,77" Width="225" SelectionChanged="CompletedListbox_SelectionChanged">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Text="{Binding Path=GetClientName}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Path=GetServiceTag}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>
