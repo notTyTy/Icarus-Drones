@@ -126,11 +126,11 @@ namespace Icarus_Drones
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
         private int ServicePriority()
         {
-            if (RegularRadio.IsChecked == true)
+            if (RegularRadio.IsChecked == true) //| RegularListview.SelectedItems != null)
             {
                 return (int)SelectCheck.Regular;
             }
-            else if (ExpressRadio.IsChecked == true)
+            else if (ExpressRadio.IsChecked == true) // | ExpressListview.SelectedItems != null)
             {
                 return (int)SelectCheck.Express;
             }
@@ -138,12 +138,11 @@ namespace Icarus_Drones
         }
         private int GetIndex()
         {
-            if (RegularListview.SelectedIndex > -1)
+            if (RegularListview.SelectedItem != null)
             {
                 return (int)SelectCheck.Regular;
             }
-            else if (ExpressListview.SelectedIndex > -1
-                ^ ExpressListview.SelectedItems != null)
+            else if (ExpressListview.SelectedItem != null)
             {
                 return (int)SelectCheck.Express;
             }
@@ -186,7 +185,7 @@ namespace Icarus_Drones
 
         private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
-            int priority = GetIndex();
+            int priority = ServicePriority();
             (Queue<Drone> queueChosen, ListView listviewChosen) = priority switch
             {
                 1 => (RegularService, RegularListview),
@@ -198,19 +197,8 @@ namespace Icarus_Drones
             {
                 FinishedList.Add(queueChosen.Dequeue());
             }
-            /*
-            if (RegularListview.SelectedItems != null)
-            {
-                FinishedList.Add(RegularService.Dequeue());
-
-            }
-            */
             Clearboxes();
             DisplayQueue();
-
-
-
-
         }
         private void CompletedListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
