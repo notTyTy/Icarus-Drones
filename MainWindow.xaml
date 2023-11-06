@@ -52,7 +52,7 @@
                             <ColumnDefinition Width="100"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Text="{Binding Path=GetClientName}" />
-                        <TextBlock Grid.Column="1" Text="{Binding Path=GetServiceTag}" />
+                        <TextBlock Grid.Column="1" Text="{Binding Path=GetCost}" />
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

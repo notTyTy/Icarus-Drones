@@ -75,9 +75,8 @@ namespace Icarus_Drones
                 CompletedListbox.Items.Add(new
                 {
                     GetClientName = item.GetClientName(),
-                    GetServiceTag = item.GetServiceTag()
+                    GetCost = item.GetCost()
                 });
-
             }
         }
         private Drone Enqueue(int serviceTag, double cost)
@@ -126,7 +125,7 @@ namespace Icarus_Drones
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
         private int ServicePriority()
         {
-            if (RegularRadio.IsChecked == true) //| RegularListview.SelectedItems != null)
+            if (RegularRadio.IsChecked == true) // | RegularListview.SelectedItems != null)
             {
                 return (int)SelectCheck.Regular;
             }
@@ -182,7 +181,6 @@ namespace Icarus_Drones
         {
             RegularListview.UnselectAll();
         }
-
         private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
             int priority = ServicePriority();
@@ -192,7 +190,6 @@ namespace Icarus_Drones
                 2 => (ExpressService, ExpressListview),
                 _ => throw new NotImplementedException()
             };
-
             if (listviewChosen.SelectedItems != null)
             {
                 FinishedList.Add(queueChosen.Dequeue());
