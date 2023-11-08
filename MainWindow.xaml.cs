@@ -125,11 +125,11 @@ namespace Icarus_Drones
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
         private int ServicePriority()
         {
-            if (RegularRadio.IsChecked == true) // | RegularListview.SelectedItems != null)
+            if (RegularRadio.IsChecked == true)
             {
                 return (int)SelectCheck.Regular;
             }
-            else if (ExpressRadio.IsChecked == true) // | ExpressListview.SelectedItems != null)
+            else if (ExpressRadio.IsChecked == true)
             {
                 return (int)SelectCheck.Express;
             }
@@ -145,10 +145,6 @@ namespace Icarus_Drones
             {
                 return (int)SelectCheck.Express;
             }
-            /*else if (RegularListview.SelectedItems != null)
-            {
-                return (int)SelectCheck.Regular;
-            }*/
             return (int)SelectCheck.None;
         }
         // 6.12, 6.13 Create a mouse click method for the regular and express service ListView that will display the Client Name
