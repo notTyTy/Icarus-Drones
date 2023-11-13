@@ -104,6 +104,7 @@ namespace Icarus_Drones
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             AddNewItem();
+
         }
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
         private void ExpressCost()
@@ -169,14 +170,6 @@ namespace Icarus_Drones
                 radioSelection.IsChecked = true;
             }
         }
-        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
-        {
-            ExpressListview.UnselectAll();
-        }
-        private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
-        {
-            RegularListview.UnselectAll();
-        }
         private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
             int priority = ServicePriority();
@@ -193,8 +186,34 @@ namespace Icarus_Drones
             Clearboxes();
             DisplayQueue();
         }
-        private void CompletedListbox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void RemoveOrder()
         {
+            int index = CompletedListbox.SelectedIndex;
+            if (index > -1)
+            {
+                FinishedList.RemoveAt(index);
+                DisplayQueue();
+                return;
+            }
+            MessageBox.Show("Please select an item before trying to remove it", "Completed order not selected!", MessageBoxButton.OK);
         }
+        private void CompletedListbox_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            RemoveOrder();
+        }
+        private void CollectedBtn_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveOrder();
+        }
+        #region LostFocus
+        private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
+        {
+            ExpressListview.UnselectAll();
+        }
+        private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
+        {
+            RegularListview.UnselectAll();
+        }
+        #endregion
     }
 }

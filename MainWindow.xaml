@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Icarus_Drones"
+        xmlns:wpfx="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MainWindow" Height="431" Width="765">
     <Grid x:Name="Grid">
         <StatusBar x:Name="StatusBar" Margin="0,391,10,0"/>
         <Button x:Name="ServicedBtn" Content="Mark as Serviced" HorizontalAlignment="Center" Margin="0,351,0,0" VerticalAlignment="Top" Width="225" Height="35" Click="ServicedBtn_Click"/>
-        <Button x:Name="CollectedBtn" Content="Order Collected" HorizontalAlignment="Left" Margin="520,351,0,0" VerticalAlignment="Top" Width="225" Height="35"/>
+        <Button x:Name="CollectedBtn" Content="Order Collected" HorizontalAlignment="Left" Margin="520,351,0,0" VerticalAlignment="Top" Width="225" Height="35" Click="CollectedBtn_Click" />
         <Button x:Name="AddBtn" Content="Add to Orders" HorizontalAlignment="Left" Margin="20,351,0,0" VerticalAlignment="Top" Width="225" Height="35" Click="AddBtn_Click" />
         <Label x:Name="RegularOrdersLabel" Content="Regular Orders" HorizontalAlignment="Left" Margin="265,182,0,0" VerticalAlignment="Top"/>
         <Label x:Name="ExpressOrdersLabel" Content="Express Orders" HorizontalAlignment="Left" Margin="265,14,0,0" VerticalAlignment="Top"/>
@@ -33,7 +34,7 @@
         <TextBox x:Name="ClientNameTextbox" HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" Height="35.92"/>
         <TextBox x:Name="DroneModelTextbox" HorizontalAlignment="Left" Margin="20,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
         <TextBox x:Name="RepairCostTextbox" HorizontalAlignment="Left" Margin="20,297,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
-        <TextBox x:Name="ServiceTagTextbox" HorizontalAlignment="Left" Margin="20,250,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
+        <TextBox x:Name="ServiceTagTextbox" HorizontalAlignment="Left" Margin="20,252,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
         <TextBox x:Name="DroneIssueTextbox" HorizontalAlignment="Left" Margin="20,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" Height="72"/>
         <Label x:Name="PriorityLabel" Content="Priority" HorizontalAlignment="Left" Margin="20,318,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="RegularRadio" Content="Regular" HorizontalAlignment="Left" Margin="83,324,0,0" VerticalAlignment="Top" GroupName="Priority"/>
@@ -43,7 +44,7 @@
         <Label x:Name="DroneIssueLabel" Content="Drone Issue" HorizontalAlignment="Left" Margin="20,123,0,0" VerticalAlignment="Top"/>
         <Label x:Name="RepairCostLabel" Content="Repair Cost" HorizontalAlignment="Left" Margin="20,270,0,0" VerticalAlignment="Top"/>
         <Label x:Name="DroneModelLabel" Content="Drone Model" HorizontalAlignment="Left" Margin="20,77,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="CompletedListbox" Margin="520,41,20,77" Width="225" SelectionChanged="CompletedListbox_SelectionChanged">
+        <ListBox x:Name="CompletedListbox" Margin="520,41,20,77" Width="225"  MouseDoubleClick="CompletedListbox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -57,5 +58,7 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <wpfx:IntegerUpDown Margin="20,270,520,126"/>
+
     </Grid>
 </Window>
