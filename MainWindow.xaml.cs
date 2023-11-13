@@ -173,18 +173,23 @@ namespace Icarus_Drones
         private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
             int priority = ServicePriority();
-            (Queue<Drone> queueChosen, ListView listviewChosen) = priority switch
+            if (priority != 0)
             {
-                1 => (RegularService, RegularListview),
-                2 => (ExpressService, ExpressListview),
-                _ => throw new NotImplementedException()
-            };
-            if (listviewChosen.SelectedItems != null)
-            {
-                FinishedList.Add(queueChosen.Dequeue());
+                (Queue<Drone> queueChosen, ListView listviewChosen) = priority switch
+                {
+                    1 => (RegularService, RegularListview),
+                    2 => (ExpressService, ExpressListview),
+                    _ => throw new NotImplementedException()
+                };
+                if (listviewChosen.SelectedItems != null)
+                {
+                    FinishedList.Add(queueChosen.Dequeue());
+                }
+                Clearboxes();
+                DisplayQueue();
+                return;
             }
-            Clearboxes();
-            DisplayQueue();
+            MessageBox.Show("Please select an item before adding it to the completed order", "Invalid selection", MessageBoxButton.OK);
         }
         private void RemoveOrder()
         {
