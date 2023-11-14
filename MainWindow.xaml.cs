@@ -84,7 +84,7 @@ namespace Icarus_Drones
             Drone drone = new();
 
             drone.SetClientName(ClientNameTextbox.Text);
-            drone.SetServiceTag(serviceTag);
+            drone.SetServiceTag(ServiceTag.Value);
             drone.SetServiceProblem(DroneIssueTextbox.Text);
             drone.SetCost(cost);
             drone.SetModel(DroneModelTextbox.Text);
