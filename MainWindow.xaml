@@ -37,8 +37,7 @@
 
         <TextBox x:Name="ClientNameTextbox" HorizontalAlignment="Left" Margin="20,40,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" Height="35.92"/>
         <TextBox x:Name="DroneModelTextbox" HorizontalAlignment="Left" Margin="20,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
-        <TextBox x:Name="RepairCostTextbox" HorizontalAlignment="Left" Margin="20,298,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
-        <TextBox x:Name="ServiceTagTextbox" HorizontalAlignment="Left" Margin="197,288,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225"/>
+        <TextBox x:Name="RepairCostTextbox" HorizontalAlignment="Left" Margin="20,298,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" PreviewTextInput="RepairCostTextbox_PreviewTextInput" PreviewKeyDown="RepairCostTextbox_PreviewKeyDown"/>
         <TextBox x:Name="DroneIssueTextbox" HorizontalAlignment="Left" Margin="20,150,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="225" Height="72"/>
         <Label x:Name="PriorityLabel" Content="Priority" HorizontalAlignment="Left" Margin="20,318,0,0" VerticalAlignment="Top"/>
         <RadioButton x:Name="RegularRadio" Content="Regular" HorizontalAlignment="Left" Margin="83,324,0,0" VerticalAlignment="Top" GroupName="Priority"/>

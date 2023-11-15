@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Icarus_Drones
 {
@@ -27,11 +29,10 @@ namespace Icarus_Drones
         // queue based on the Priority radio button.
         public void AddNewItem()
         {
-            if (int.TryParse(ServiceTagTextbox.Text, out int serviceTag) // Service tag needs to be updated to an updown 
-                && double.TryParse(RepairCostTextbox.Text, out double cost))
+            if (double.TryParse(RepairCostTextbox.Text, out double cost))
             {
                 int priority = ServicePriority();
-                var setInt = Enqueue(serviceTag, cost);
+                var setInt = Enqueue(cost);
                 var queueChosen = priority switch
                 {
                     1 => RegularService,
@@ -79,7 +80,7 @@ namespace Icarus_Drones
                 });
             }
         }
-        private Drone Enqueue(int serviceTag, double cost)
+        private Drone Enqueue(double cost)
         {
             Drone drone = new();
 
@@ -96,7 +97,7 @@ namespace Icarus_Drones
             ClientNameTextbox.Clear();
             DroneModelTextbox.Clear();
             DroneIssueTextbox.Clear();
-            ServiceTagTextbox.Clear(); // Needs to be a Numeric Control 
+            // TODO Update the ServiceTag Updown to the next incremement
             RepairCostTextbox.Clear();
             RegularRadio.IsChecked = false;
             ExpressRadio.IsChecked = false;
@@ -104,7 +105,6 @@ namespace Icarus_Drones
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             AddNewItem();
-
         }
         // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
         private void ExpressCost()
@@ -113,9 +113,11 @@ namespace Icarus_Drones
             {
                 double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
                 RepairCostTextbox.Text = cost.ToString();
+                // ^(\d{ 1,4} (\.\d{ 0,2})?$ Regex
                 // Need to add regex logic for the textbox
             }
         }
+
         private enum SelectCheck
         {
             None,
@@ -165,7 +167,7 @@ namespace Icarus_Drones
                 ClientNameTextbox.Text = queueChosen.ElementAt(index).GetClientName();
                 DroneModelTextbox.Text = queueChosen.ElementAt(index).GetModel();
                 DroneIssueTextbox.Text = queueChosen.ElementAt(index).GetServiceProblem();
-                ServiceTagTextbox.Text = queueChosen.ElementAt(index).GetServiceTag().ToString();
+                ServiceTag.Value = queueChosen.ElementAt(index).GetServiceTag();
                 RepairCostTextbox.Text = queueChosen.ElementAt(index).GetCost().ToString();
                 radioSelection.IsChecked = true;
             }
@@ -220,5 +222,25 @@ namespace Icarus_Drones
             RegularListview.UnselectAll();
         }
         #endregion
+
+        private void RepairCostTextbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+
+            string newText = RepairCostTextbox.Text + e.Text;
+
+            Regex regex = new Regex(@"^(?=\d{1,4}(\.\d{0,2})?$)\d{1,4}(\.\d{0,2})?$");
+            e.Handled = !regex.IsMatch(newText);
+        }
+
+        // TODO Remove the ability to press space and paste
+
+        private void RepairCostTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == ((Key.LeftCtrl | Key.RightCtrl) & Key.V) 
+                || e.Key == Key.Space)
+            {
+                e.Handled = true;
+            }
+        }
     }
 }
