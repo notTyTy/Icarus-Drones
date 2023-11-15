@@ -13,7 +13,7 @@ namespace Icarus_Drones
         private string _clientName;
         private int _serviceTag;
         private string _serviceProblem;
-        private double _cost;
+        private string _cost;
         private string _model;
         #endregion
         // 6.1 Ensure accessor methods are public
@@ -30,7 +30,7 @@ namespace Icarus_Drones
         {
             return _serviceProblem;
         }
-        public double GetCost()
+        public string GetCost()
         {
             return _cost;
         }
@@ -43,7 +43,7 @@ namespace Icarus_Drones
         public void SetClientName(string clientName) => _clientName = clientName;
         public void SetServiceTag(int serviceTag) => _serviceTag = serviceTag;
         public void SetServiceProblem(string serviceProblem) => _serviceProblem = serviceProblem;
-        public void SetCost(double cost) => _cost = cost;
+        public void SetCost(string cost) => _cost = cost;
         public void SetModel(string model) => _model = model;
         #endregion
     }

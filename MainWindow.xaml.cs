@@ -29,21 +29,22 @@ namespace Icarus_Drones
         // queue based on the Priority radio button.
         public void AddNewItem()
         {
-            // if (double.TryParse(RepairCostTextbox.Text, out double cost))
             {
                 double.TryParse(RepairCostTextbox.Text, out double cost);
                 int priority = ServicePriority();
-                // var setInt = Enqueue(cost);
 
                 if (priority != 0)
                 {
                     (Queue<Drone> queueChosen, double serviceCost) = priority switch
                     {
                         1 => (RegularService, cost),
+                        // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
                         2 => (ExpressService, (cost * 1.15)),
                         _ => throw new NotImplementedException()
                     };
-                    Drone setInt = Enqueue(serviceCost);
+
+                    string finalCost = serviceCost.ToString("F2");
+                    Drone setInt = Enqueue(finalCost);
                     queueChosen.Enqueue(setInt);
 
                     DisplayQueue();
@@ -84,7 +85,7 @@ namespace Icarus_Drones
                 });
             }
         }
-        private Drone Enqueue(double cost)
+        private Drone Enqueue(string cost)
         {
             Drone drone = new();
 
@@ -95,13 +96,13 @@ namespace Icarus_Drones
             drone.SetModel(DroneModelTextbox.Text);
             return drone;
         }
+
         // 6.17 Create a custom method that will clear all the textboxes after each service item has been added
         public void Clearboxes()
         {
             ClientNameTextbox.Clear();
             DroneModelTextbox.Clear();
             DroneIssueTextbox.Clear();
-            // TODO Update the ServiceTag Updown to the next incremement
             RepairCostTextbox.Clear();
             RegularRadio.IsChecked = false;
             ExpressRadio.IsChecked = false;
@@ -110,24 +111,19 @@ namespace Icarus_Drones
         {
             AddNewItem();
         }
-        // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
-        private void ExpressCost()
-        {
-            if (ServicePriority() == 2)
-            {
-                double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
-                RepairCostTextbox.Text = cost.ToString();
-            }
-        }
 
+        // TODO Update the ServiceTag Updown to the next incremement
+
+
+        // 6.7 Which returns the value of the priority radio group.
+        // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
+        #region ServicePriority(), GetIndex()
         private enum SelectCheck
         {
             None,
             Regular,
             Express
         }
-        // 6.7 Which returns the value of the priority radio group.
-        // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
         private int ServicePriority()
         {
             if (RegularRadio.IsChecked == true)
@@ -152,6 +148,8 @@ namespace Icarus_Drones
             }
             return (int)SelectCheck.None;
         }
+        #endregion
+
         // 6.12, 6.13 Create a mouse click method for the regular and express service ListView that will display the Client Name
         // and service problem in the related textboxes
         private void SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
@@ -174,6 +172,10 @@ namespace Icarus_Drones
                 radioSelection.IsChecked = true;
             }
         }
+
+        // 6.14, 6.15 Create a button click method that will remove a service item from the regular/express ListView and dequeue
+        // The regular/express service from the express service Queue<Drone> data structure. The dequeued item must be added
+        // to the List<Drone> and displayed in the ListBox for finished service items
         private void ServicedBtn_Click(object sender, RoutedEventArgs e)
         {
             int priority = ServicePriority();
@@ -195,6 +197,10 @@ namespace Icarus_Drones
             }
             MessageBox.Show("Please select an item before adding it to the completed order", "Invalid selection", MessageBoxButton.OK);
         }
+
+        // 6.16 Create a double mouse click method that will delete a service item from the finished listbox 
+        // and remove the same item from the List<Drone>
+        #region Remove order
         private void RemoveOrder()
         {
             int index = CompletedListbox.SelectedIndex;
@@ -214,6 +220,7 @@ namespace Icarus_Drones
         {
             RemoveOrder();
         }
+        #endregion
         #region LostFocus
         private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
         {
@@ -224,11 +231,9 @@ namespace Icarus_Drones
             RegularListview.UnselectAll();
         }
         #endregion
-
-        #region Regex, space and paste handling
+        #region Regex, Space and Paste handling
         private void RepairCostTextbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
-
             string newText = RepairCostTextbox.Text + e.Text;
 
             Regex regex = new Regex(@"^(?=\d{1,4}(\.\d{0,2})?$)\d{1,4}(\.\d{0,2})?$");
