@@ -7,18 +7,17 @@ namespace Icarus_Drones
     // Use seperate setter and getter methods
     public class Drone
     {
+        public Drone() { }
         // 6.1 Ensure attributes are private
+        #region Attributes
         private string _clientName;
         private int _serviceTag;
         private string _serviceProblem;
         private double _cost;
         private string _model;
-
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-        public Drone() { }
-#pragma warning restore CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-
+        #endregion
         // 6.1 Ensure accessor methods are public
+        #region Getters
         public string GetClientName() // Getter
         {
             return _clientName;
@@ -39,25 +38,13 @@ namespace Icarus_Drones
         {
             return _model;
         }
-        public void SetClientName(string clientName)
-        {
-            _clientName = clientName;
-        }
-        public void SetServiceTag(int serviceTag)
-        {
-            _serviceTag = serviceTag;
-        }
-        public void SetServiceProblem(string serviceProblem)
-        {
-            _serviceProblem = serviceProblem;
-        }
-        public void SetCost(double cost)
-        {
-            _cost = cost;
-        }
-        public void SetModel(string model)
-        {
-            _model = model;
-        }
+        #endregion
+        #region Setters
+        public void SetClientName(string clientName) => _clientName = clientName;
+        public void SetServiceTag(int serviceTag) => _serviceTag = serviceTag;
+        public void SetServiceProblem(string serviceProblem) => _serviceProblem = serviceProblem;
+        public void SetCost(double cost) => _cost = cost;
+        public void SetModel(string model) => _model = model;
+        #endregion
     }
 }

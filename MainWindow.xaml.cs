@@ -29,25 +29,29 @@ namespace Icarus_Drones
         // queue based on the Priority radio button.
         public void AddNewItem()
         {
-            if (double.TryParse(RepairCostTextbox.Text, out double cost))
+            // if (double.TryParse(RepairCostTextbox.Text, out double cost))
             {
+                double.TryParse(RepairCostTextbox.Text, out double cost);
                 int priority = ServicePriority();
-                var setInt = Enqueue(cost);
-                var queueChosen = priority switch
+                // var setInt = Enqueue(cost);
+
+                if (priority != 0)
                 {
-                    1 => RegularService,
-                    2 => ExpressService,
-                    _ => throw new NotImplementedException()
-                };
-                queueChosen.Enqueue(setInt);
+                    (Queue<Drone> queueChosen, double serviceCost) = priority switch
+                    {
+                        1 => (RegularService, cost),
+                        2 => (ExpressService, (cost * 1.15)),
+                        _ => throw new NotImplementedException()
+                    };
+                    Drone setInt = Enqueue(serviceCost);
+                    queueChosen.Enqueue(setInt);
+
+                    DisplayQueue();
+                    Clearboxes();
+                }
             }
-            else
-            {
-                MessageBox.Show("Please input cost correctly! (2.dp)", "Invalid Input", MessageBoxButton.OK, MessageBoxImage.Hand);
-            }
-            DisplayQueue();
-            Clearboxes();
         }
+
         // 6.8, 6.9 Create a custom method that will display all the elements in the Regular and Express service queue
         // The display must use a listview and with the appropriate column headers
         private void DisplayQueue()
@@ -113,8 +117,6 @@ namespace Icarus_Drones
             {
                 double cost = Convert.ToInt32(RepairCostTextbox.Text) * 1.15;
                 RepairCostTextbox.Text = cost.ToString();
-                // ^(\d{ 1,4} (\.\d{ 0,2})?$ Regex
-                // Need to add regex logic for the textbox
             }
         }
 
@@ -223,6 +225,7 @@ namespace Icarus_Drones
         }
         #endregion
 
+        #region Regex, space and paste handling
         private void RepairCostTextbox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
         {
 
@@ -231,16 +234,14 @@ namespace Icarus_Drones
             Regex regex = new Regex(@"^(?=\d{1,4}(\.\d{0,2})?$)\d{1,4}(\.\d{0,2})?$");
             e.Handled = !regex.IsMatch(newText);
         }
-
-        // TODO Remove the ability to press space and paste
-
         private void RepairCostTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == ((Key.LeftCtrl | Key.RightCtrl) & Key.V) 
+            if (e.Key == ((Key.LeftCtrl | Key.RightCtrl) & Key.V)
                 || e.Key == Key.Space)
             {
                 e.Handled = true;
             }
         }
+        #endregion
     }
 }
