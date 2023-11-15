@@ -104,8 +104,6 @@ namespace Icarus_Drones
             DroneModelTextbox.Clear();
             DroneIssueTextbox.Clear();
             RepairCostTextbox.Clear();
-            RegularRadio.IsChecked = false;
-            ExpressRadio.IsChecked = false;
         }
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -225,10 +223,12 @@ namespace Icarus_Drones
         private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
         {
             ExpressListview.UnselectAll();
+            Clearboxes();
         }
         private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
         {
             RegularListview.UnselectAll();
+            Clearboxes();
         }
         #endregion
         #region Regex, Space and Paste handling
