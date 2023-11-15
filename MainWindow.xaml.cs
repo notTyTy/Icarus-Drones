@@ -42,6 +42,7 @@ namespace Icarus_Drones
                         2 => (ExpressService, (cost * 1.15)),
                         _ => throw new NotImplementedException()
                     };
+                    ServiceTag.Value = IncrementTag();
 
                     string finalCost = serviceCost.ToString("F2");
                     Drone setInt = Enqueue(finalCost);
@@ -51,6 +52,10 @@ namespace Icarus_Drones
                     Clearboxes();
                 }
             }
+        }
+        private int IncrementTag()
+        {
+            return 100 + (RegularService.Count() + ExpressService.Count() + FinishedList.Count()) * 10;
         }
 
         // 6.8, 6.9 Create a custom method that will display all the elements in the Regular and Express service queue
@@ -104,6 +109,7 @@ namespace Icarus_Drones
             DroneModelTextbox.Clear();
             DroneIssueTextbox.Clear();
             RepairCostTextbox.Clear();
+            ServiceTag.Value = IncrementTag();
         }
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -171,6 +177,7 @@ namespace Icarus_Drones
             }
         }
 
+
         // 6.14, 6.15 Create a button click method that will remove a service item from the regular/express ListView and dequeue
         // The regular/express service from the express service Queue<Drone> data structure. The dequeued item must be added
         // to the List<Drone> and displayed in the ListBox for finished service items
@@ -185,15 +192,17 @@ namespace Icarus_Drones
                     2 => (ExpressService, ExpressListview),
                     _ => throw new NotImplementedException()
                 };
-                if (listviewChosen.SelectedItems != null)
+                if (listviewChosen.Items.Count > 0)
                 {
                     FinishedList.Add(queueChosen.Dequeue());
+                    Clearboxes();
+                    DisplayQueue();
+                    return;
                 }
-                Clearboxes();
-                DisplayQueue();
+                MessageBox.Show("Please select an item before adding it to the completed order.", "Listview Empty", MessageBoxButton.OK);
                 return;
             }
-            MessageBox.Show("Please select an item before adding it to the completed order", "Invalid selection", MessageBoxButton.OK);
+            MessageBox.Show("Please select an item before adding it to the Completed Orders.", "Invalid selection", MessageBoxButton.OK);
         }
 
         // 6.16 Create a double mouse click method that will delete a service item from the finished listbox 
