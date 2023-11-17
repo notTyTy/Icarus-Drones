@@ -10,7 +10,7 @@
         Title="MainWindow" Height="431" Width="1022">
     <Grid x:Name="Grid">
         <Button x:Name="ServicedBtn" Content="Mark as Serviced" Margin="265,351,277,0" Click="ServicedBtn_Click" Height="35" VerticalAlignment="Top"/>
-        <Button x:Name="CollectedBtn" Content="Order Collected" Margin="0,351,45,0" Click="CollectedBtn_Click" Height="35" VerticalAlignment="Top" HorizontalAlignment="Right" Width="212" />
+        <Button x:Name="CollectedBtn" Content="Order Collected" Margin="0,351,45,0" Click="CollectedBtn_Click" Height="35" VerticalAlignment="Top" HorizontalAlignment="Right" Width="200" />
         <Button x:Name="AddBtn" Content="Add to Orders" Margin="20,351,777,0" Click="AddBtn_Click" Height="35" VerticalAlignment="Top" />
         <Label x:Name="RegularOrdersLabel" Content="Regular Orders" HorizontalAlignment="Left" Margin="265,182,0,0" VerticalAlignment="Top"/>
         <Label x:Name="ExpressOrdersLabel" Content="Express Orders" HorizontalAlignment="Left" Margin="265,14,0,0" VerticalAlignment="Top"/>
@@ -52,7 +52,7 @@
         <Label x:Name="RepairCostLabel" Content="Repair Cost" HorizontalAlignment="Left" Margin="20,270,0,0" VerticalAlignment="Top"/>
         <Label x:Name="DroneIssueLabel" Content="Drone Issue" HorizontalAlignment="Left" Margin="20,123,0,0" VerticalAlignment="Top"/>
         <Label x:Name="DroneModelLabel" Content="Drone Model" HorizontalAlignment="Left" Margin="20,77,0,0" VerticalAlignment="Top"/>
-        <ListBox x:Name="CompletedListbox" Margin="765,40,45,78"  MouseDoubleClick="CompletedListbox_MouseDoubleClick">
+        <ListBox x:Name="CompletedListbox" Margin="765,40,45,64"  MouseDoubleClick="CompletedListbox_MouseDoubleClick">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid>
