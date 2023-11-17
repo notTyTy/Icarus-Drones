@@ -14,7 +14,7 @@
         <Button x:Name="AddBtn" Content="Add to Orders" Margin="20,351,777,0" Click="AddBtn_Click" Height="35" VerticalAlignment="Top" />
         <Label x:Name="RegularOrdersLabel" Content="Regular Orders" HorizontalAlignment="Left" Margin="265,182,0,0" VerticalAlignment="Top"/>
         <Label x:Name="ExpressOrdersLabel" Content="Express Orders" HorizontalAlignment="Left" Margin="265,14,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="CompletedOrdersLabel" Content="Completed Orders" HorizontalAlignment="Left" Margin="777,14,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="CompletedOrdersLabel" Content="Completed Orders" HorizontalAlignment="Left" Margin="765,14,0,0" VerticalAlignment="Top"/>
         <cntrl:NumericUpDown Name="ServiceTag" Margin="20,247,762,0" VerticalAlignment="Top" DisplayLength="5" IsDisplayLengthFixed="True" IsMouseDragEnabled="False" IsReadOnly="True" MinValue="100" MaxValue="900" StepSize="10"/>
         <ListView x:Name="ExpressListview" Margin="265,40,277,229" SelectionChanged="SelectionChanged" LostFocus="ExpressListview_LostFocus" >
             <ListView.View>
