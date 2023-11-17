@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,41 +21,58 @@ namespace Icarus_Drones
         // 6.4 Create a global Queue<T> of type Drone called “ExpressService”.
         readonly Queue<Drone> ExpressService = new();
 
+        // A method to group textboxes together, used in the Clearboxes() method and AddNewItem()
+        private List<TextBox> TextBoxes()
+        {
+            List<TextBox> list = new List<TextBox> { ClientNameTextbox, DroneIssueTextbox, DroneModelTextbox, RepairCostTextbox };
+            return list;
+        }
+
         // 6.5 Create a button method called “AddNewItem” that will add a new service item to a Queue<> based 
         // on the priority. Use TextBoxes for the Client Name, Drone Model, Service Problem and Service Cost.
         // Use a numeric control for the Service Tag. The new service item will be added to the appropriate
         // queue based on the Priority radio button.
-        public void AddNewItem()
+        private void AddNewItem()
         {
+            foreach (TextBox item in TextBoxes())
             {
-                double.TryParse(RepairCostTextbox.Text, out double cost);
-                int priority = ServicePriority();
-
-                if (priority != 0)
+                if (item.Text == "")
                 {
-                    (Queue<Drone> queueChosen, double serviceCost) = priority switch
-                    {
-                        1 => (RegularService, cost),
-                        // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
-                        2 => (ExpressService, (cost * 1.15)),
-                        _ => throw new NotImplementedException()
-                    };
-                    ServiceTag.Value = IncrementTag();
-
-                    string finalCost = serviceCost.ToString("F2");
-                    Drone setInt = Enqueue(finalCost);
-                    queueChosen.Enqueue(setInt);
-
-                    DisplayQueue();
-                    Clearboxes();
+                    MessageBox.Show("Please fill in all fields before adding an item to the queue", "Empty Fields error", MessageBoxButton.OK);
+                    return;
                 }
             }
+            // TODO add a check to ensure all textboxes are filled
+            int priority = ServicePriority();
+            double cost = double.Parse(RepairCostTextbox.Text);
+            if (priority != 0)
+            {
+                (Queue<Drone> queueChosen, double serviceCost) = priority switch
+                {
+                    1 => (RegularService, cost),
+                    // 6.6 Before a new service item is added to the Express Queue the service cost must be increased by 15%.
+                    2 => (ExpressService, (cost * 1.15)),
+                    _ => throw new NotImplementedException()
+                };
+
+                // double finalCost = double.Parse(serviceCost.ToString("F2"));
+
+                Drone setInt = Enqueue(double.Parse(serviceCost.ToString("F2")));
+                queueChosen.Enqueue(setInt);
+
+                DisplayQueue();
+                Clearboxes();
+                ServiceTag.Value = IncrementTag();
+
+
+            }
         }
+        private List<string> list = new();
         private int IncrementTag()
         {
-            return 100 + (RegularService.Count() + ExpressService.Count() + FinishedList.Count()) * 10;
+            list.Add("");
+            return 10 * list.Count + 100;
         }
-
         // 6.8, 6.9 Create a custom method that will display all the elements in the Regular and Express service queue
         // The display must use a listview and with the appropriate column headers
         private void DisplayQueue()
@@ -70,7 +85,10 @@ namespace Icarus_Drones
                 ExpressListview.Items.Add(new
                 {
                     GetClientName = item.GetClientName(),
-                    GetServiceTag = item.GetServiceTag()
+                    GetServiceTag = item.GetServiceTag(),
+                    GetCost = item.GetCost(),
+                    GetModel = item.GetModel(),
+                    GetIssue = item.GetServiceProblem()
                 });
             }
             foreach (Drone item in RegularService)
@@ -78,7 +96,10 @@ namespace Icarus_Drones
                 RegularListview.Items.Add(new
                 {
                     GetClientName = item.GetClientName(),
-                    GetServiceTag = item.GetServiceTag()
+                    GetServiceTag = item.GetServiceTag(),
+                    GetCost = item.GetCost(),
+                    GetModel = item.GetModel(),
+                    GetIssue = item.GetServiceProblem()
                 });
             }
             foreach (Drone item in FinishedList)
@@ -90,10 +111,9 @@ namespace Icarus_Drones
                 });
             }
         }
-        private Drone Enqueue(string cost)
+        private Drone Enqueue(double cost)
         {
             Drone drone = new();
-
             drone.SetClientName(ClientNameTextbox.Text);
             drone.SetServiceTag(ServiceTag.Value);
             drone.SetServiceProblem(DroneIssueTextbox.Text);
@@ -105,19 +125,15 @@ namespace Icarus_Drones
         // 6.17 Create a custom method that will clear all the textboxes after each service item has been added
         public void Clearboxes()
         {
-            ClientNameTextbox.Clear();
-            DroneModelTextbox.Clear();
-            DroneIssueTextbox.Clear();
-            RepairCostTextbox.Clear();
-            ServiceTag.Value = IncrementTag();
+            foreach (TextBox item in TextBoxes())
+            {
+                item.Clear();
+            }
         }
         private void AddBtn_Click(object sender, RoutedEventArgs e)
         {
             AddNewItem();
         }
-
-        // TODO Update the ServiceTag Updown to the next incremement
-
 
         // 6.7 Which returns the value of the priority radio group.
         // This method must be called inside the “AddNewItem” method before the new service item is added to a queue.
@@ -140,6 +156,7 @@ namespace Icarus_Drones
             }
             return (int)SelectCheck.None;
         }
+
         private int GetIndex()
         {
             if (RegularListview.SelectedItem != null)
@@ -176,7 +193,6 @@ namespace Icarus_Drones
                 radioSelection.IsChecked = true;
             }
         }
-
 
         // 6.14, 6.15 Create a button click method that will remove a service item from the regular/express ListView and dequeue
         // The regular/express service from the express service Queue<Drone> data structure. The dequeued item must be added
@@ -232,12 +248,18 @@ namespace Icarus_Drones
         private void ExpressListview_LostFocus(object sender, RoutedEventArgs e)
         {
             ExpressListview.UnselectAll();
+            ServiceTag.Value = IncrementTag() - 10;
+            list.RemoveAt(list.Count - 1);
             Clearboxes();
+
         }
         private void RegularListview_LostFocus(object sender, RoutedEventArgs e)
         {
             RegularListview.UnselectAll();
+            ServiceTag.Value = IncrementTag() - 10;
+            list.RemoveAt(list.Count - 1);
             Clearboxes();
+
         }
         #endregion
         #region Regex, Space and Paste handling
@@ -245,7 +267,7 @@ namespace Icarus_Drones
         {
             string newText = RepairCostTextbox.Text + e.Text;
 
-            Regex regex = new Regex(@"^(?=\d{1,4}(\.\d{0,2})?$)\d{1,4}(\.\d{0,2})?$");
+            Regex regex = new(@"^(?=\d{1,4}(\.\d{0,2})?$)\d{1,4}(\.\d{0,2})?$");
             e.Handled = !regex.IsMatch(newText);
         }
         private void RepairCostTextbox_PreviewKeyDown(object sender, KeyEventArgs e)

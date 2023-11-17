@@ -7,13 +7,15 @@ namespace Icarus_Drones
     // Use seperate setter and getter methods
     public class Drone
     {
+#pragma warning disable CS8618
         public Drone() { }
-        // 6.1 Ensure attributes are private
+#pragma warning restore CS8618
+
         #region Attributes
         private string _clientName;
         private int _serviceTag;
         private string _serviceProblem;
-        private string _cost;
+        private double _cost;
         private string _model;
         #endregion
         // 6.1 Ensure accessor methods are public
@@ -30,7 +32,7 @@ namespace Icarus_Drones
         {
             return _serviceProblem;
         }
-        public string GetCost()
+        public double GetCost()
         {
             return _cost;
         }
@@ -43,7 +45,7 @@ namespace Icarus_Drones
         public void SetClientName(string clientName) => _clientName = clientName;
         public void SetServiceTag(int serviceTag) => _serviceTag = serviceTag;
         public void SetServiceProblem(string serviceProblem) => _serviceProblem = serviceProblem;
-        public void SetCost(string cost) => _cost = cost;
+        public void SetCost(double cost) => _cost = cost;
         public void SetModel(string model) => _model = model;
         #endregion
     }
