@@ -34,9 +34,10 @@ namespace Icarus_Drones
         // queue based on the Priority radio button.
         private void AddNewItem()
         {
+            RadioButton radioButton = new();
             foreach (TextBox item in TextBoxes())
             {
-                if (item.Text == "")
+                if (item.Text == "" | radioButton.IsFocused == true)
                 {
                     MessageBox.Show("Please fill in all fields before adding an item to the queue", "Empty Fields error", MessageBoxButton.OK);
                     return;
@@ -54,17 +55,11 @@ namespace Icarus_Drones
                     2 => (ExpressService, (cost * 1.15)),
                     _ => throw new NotImplementedException()
                 };
-
-                // double finalCost = double.Parse(serviceCost.ToString("F2"));
-
                 Drone setInt = Enqueue(double.Parse(serviceCost.ToString("F2")));
                 queueChosen.Enqueue(setInt);
 
                 DisplayQueue();
                 Clearboxes();
-                ServiceTag.Value = IncrementTag();
-
-
             }
         }
         private List<string> list = new();

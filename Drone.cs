@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Icarus_Drones
 {
@@ -42,7 +43,13 @@ namespace Icarus_Drones
         }
         #endregion
         #region Setters
-        public void SetClientName(string clientName) => _clientName = clientName;
+        public void SetClientName(string clientName)
+        {
+            // Creates a TextInfo based on the "en-US" culture.
+            TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
+
+            _clientName = myTI.ToTitleCase(clientName);
+        }
         public void SetServiceTag(int serviceTag) => _serviceTag = serviceTag;
         public void SetServiceProblem(string serviceProblem) => _serviceProblem = serviceProblem;
         public void SetCost(double cost) => _cost = cost;
