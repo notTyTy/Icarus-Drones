@@ -8,9 +8,7 @@ namespace Icarus_Drones
     // Use seperate setter and getter methods
     public class Drone
     {
-#pragma warning disable CS8618
         public Drone() { }
-#pragma warning restore CS8618
 
         #region Attributes
         private string _clientName;
