@@ -45,6 +45,7 @@ namespace Icarus_Drones
         #region Setters
         public void SetClientName(string clientName)
         {
+            // 6.1 Ensure that Client name is saved as titlecase
             // Creates a TextInfo based on the "en-US" culture.
             TextInfo myTI = new CultureInfo("en-US", false).TextInfo;
 

@@ -24,7 +24,7 @@ namespace Icarus_Drones
         // A method to group textboxes together, used in the Clearboxes() method and AddNewItem()
         private List<TextBox> TextBoxes()
         {
-            List<TextBox> list = new List<TextBox> { ClientNameTextbox, DroneIssueTextbox, DroneModelTextbox, RepairCostTextbox };
+            List<TextBox> list = new() { ClientNameTextbox, DroneIssueTextbox, DroneModelTextbox, RepairCostTextbox };
             return list;
         }
 
@@ -43,7 +43,6 @@ namespace Icarus_Drones
                     return;
                 }
             }
-            // TODO add a check to ensure all textboxes are filled
             int priority = ServicePriority();
             double cost = double.Parse(RepairCostTextbox.Text);
             if (priority != 0)
@@ -62,7 +61,9 @@ namespace Icarus_Drones
                 Clearboxes();
             }
         }
-        private List<string> list = new();
+
+        // List<string> list is used to increment the tag value
+        private readonly List<string> list = new();
         private int IncrementTag()
         {
             list.Add("");
@@ -262,7 +263,7 @@ namespace Icarus_Drones
         {
             string newText = RepairCostTextbox.Text + e.Text;
 
-            Regex regex = new(@"^(?=\d{1,4}(\.\d{0,2})?$)\d{1,4}(\.\d{0,2})?$");
+            Regex regex = MyRegex();
             e.Handled = !regex.IsMatch(newText);
         }
         private void RepairCostTextbox_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -273,6 +274,8 @@ namespace Icarus_Drones
                 e.Handled = true;
             }
         }
+        [GeneratedRegex("^(?=\\d{1,4}(\\.\\d{0,2})?$)\\d{1,4}(\\.\\d{0,2})?$")]
+        private static partial Regex MyRegex();
         #endregion
     }
 }
